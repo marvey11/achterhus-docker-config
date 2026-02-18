@@ -1,0 +1,32 @@
+services:
+  homeassistant:
+    container_name: homeassistant
+    image: "ghcr.io/home-assistant/home-assistant:stable"
+    volumes:
+      - ${SMARTHOME_BASE}/ha-config:/config
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    network_mode: host
+
+  esphome:
+    container_name: esphome
+    image: ghcr.io/esphome/esphome
+    volumes:
+      - ${SMARTHOME_BASE}/esphome-config:/config
+      - ${SMARTHOME_BASE}/esphome-cache:/root/.platformio
+      - /etc/localtime:/etc/localtime:ro
+    restart: unless-stopped
+    network_mode: host
+
+  mosquitto:
+    container_name: mosquitto
+    image: eclipse-mosquitto
+    user: "${LOCAL_UID}:${LOCAL_GID}" # Ensures logs/data belong to marvey
+    volumes:
+      - ${SMARTHOME_BASE}/mosquitto/config:/mosquitto/config
+      - ${SMARTHOME_BASE}/mosquitto/data:/mosquitto/data
+      - ${SMARTHOME_BASE}/mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    restart: unless-stopped

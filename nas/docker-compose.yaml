@@ -1,0 +1,23 @@
+services:
+  samba:
+    image: dperson/samba
+    container_name: samba
+    environment:
+      - USER=${SAMBA_USER};${SAMBA_PASSWORD};${LOCAL_UID};${LOCAL_GID}
+      # Syntax: name;path;public;readonly;guest;users;admins;writable
+      - SHARE1=Storage;/mnt/storage;no;no;no;${SAMBA_USER};${SAMBA_USER};yes
+      - SHARE2=Backup;/mnt/backup;no;yes;no;${SAMBA_USER};${SAMBA_USER};no
+      - TZ=Europe/Berlin
+    volumes:
+      - ${STORAGE_ROOT}:/mnt/storage
+      - ${BACKUP_ROOT}:/mnt/backup
+    restart: unless-stopped
+    ports:
+      - "139:139"
+      - "445:445"
+    networks:
+      - nas_network
+
+networks:
+  nas_network:
+    driver: bridge
