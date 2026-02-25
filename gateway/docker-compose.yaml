@@ -1,0 +1,16 @@
+services:
+  gateway:
+    image: nginx:alpine
+    container_name: achterhus-gateway
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - achterhus-network
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./html:/usr/share/nginx/html:ro
+
+networks:
+  achterhus-network:
+    external: true
