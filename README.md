@@ -9,13 +9,13 @@ At this point, we have configurations for the SmartHome/Home Assistant/ESPHome c
 We've switched to using a single Docker network for new applications:
 
 ```shell
-docker network create achterhus-gateway
+docker network create achterhus-network
 ```
 
 Each new `docker-compose.yaml` which will run an application in the same network will now use the following `networks` configuration:
 
 ```yaml
 networks:
-  achterhus-gateway:
+  achterhus-network:
     external: true
 ```
