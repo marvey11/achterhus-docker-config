@@ -9,7 +9,8 @@ services:
       - achterhus-network
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./html:/usr/share/nginx/html:ro
+      - ./html:/usr/share/nginx/html
+      - /home/marvey/.achterhus/service-status:/usr/share/nginx/html/service-status:ro
 
 networks:
   achterhus-network:
