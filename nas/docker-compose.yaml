@@ -12,12 +12,4 @@ services:
       # Map your custom config over the default one
       - ./samba.conf:/etc/samba/smb.conf:ro
     restart: unless-stopped
-    ports:
-      - "139:139"
-      - "445:445"
-    networks:
-      - nas_network
-
-networks:
-  nas_network:
-    driver: bridge
+    network_mode: host
