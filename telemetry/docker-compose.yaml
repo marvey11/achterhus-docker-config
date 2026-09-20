@@ -1,0 +1,31 @@
+name: achterhus-telemetry
+
+services:
+  telemetry-api:
+    image: ghcr.io/marvey11/achterhus-telemetry-api:latest
+    container_name: telemetry-api
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:////data/telemetry.db
+      - LOG_LEVEL=info
+    volumes:
+      - telemetry-data:/data
+    networks:
+      - achterhus-network
+
+  dashboard:
+    image: ghcr.io/marvey11/achterhus-telemetry-dashboard:latest
+    container_name: telemetry-dashboard
+    restart: unless-stopped
+    depends_on:
+      - telemetry-api
+    networks:
+      - achterhus-network
+
+volumes:
+  telemetry-data:
+    driver: local
+
+networks:
+  achterhus-network:
+    external: true
