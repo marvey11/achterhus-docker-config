@@ -1,18 +1,26 @@
-# Achterhus Docker Config
+# Achterhus Docker Configurations
 
-This repository contains the relevant `docker-compose.yaml` configurations running on the `achterhus` server.
+This repository contains the relevant `docker-compose.yaml` configurations
+running on the `achterhus` home server.
 
-At this point, we have configurations for the SmartHome/Home Assistant/ESPHome containers and the Samba/NAS configuration for backups.
+At this point, there are configurations for:
 
-# Docker Network
+* the SmartHome/Home Assistant/ESPHome containers
+* the Samba/NAS configuration for backups
+* the centralised `achterhus` gateway
+* the service telemetry application
+* the PostgreSQL and `pgadmin` containers for applications requiring a database
 
-We've switched to using a single Docker network for new applications:
+## Docker Network
 
-```shell
+There is a single unified Docker network for all applications:
+
+```bash
 docker network create achterhus-network
 ```
 
-Each new `docker-compose.yaml` which will run an application in the same network will now use the following `networks` configuration:
+Each new `docker-compose.yaml` which will run an application in the same
+network will now use the following `networks` configuration:
 
 ```yaml
 networks:
