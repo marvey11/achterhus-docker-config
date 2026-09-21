@@ -9,6 +9,7 @@ At this point, there are configurations for:
 * the Samba/NAS configuration for backups
 * the centralised `achterhus` gateway
 * the service telemetry application
+* the server tools
 * the PostgreSQL and `pgadmin` containers for applications requiring a database
 
 ## Docker Network
