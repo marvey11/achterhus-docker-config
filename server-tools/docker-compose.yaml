@@ -1,0 +1,16 @@
+services:
+  backup-storage:
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["backup-storage", "--source", "/mnt/storage", "--destination", "/mnt/mirror", "-n"]
+    restart: "no"
+    environment:
+      - TELEMETRY_API_URL=http://telemetry-api:8000
+    volumes:
+      - /mnt/storage:/mnt/storage:ro
+      - /mnt/backup/mirror:/mnt/mirror:rw
+    networks:
+      - achterhus-network
+
+networks:
+  achterhus-network:
+    external: true
