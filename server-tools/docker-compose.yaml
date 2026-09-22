@@ -20,6 +20,7 @@ services:
     environment:
       - TELEMETRY_API_URL=http://telemetry-api:8000
     volumes:
+      - ${HOME}/.config/rclone/rclone.conf:/home/appuser/.config/rclone/rclone.conf:ro
       - ${HOST_SYNC_DIR}:/mnt/gdrivesync:rw
     networks:
       - achterhus-network
