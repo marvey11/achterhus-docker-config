@@ -11,6 +11,19 @@ services:
     networks:
       - achterhus-network
 
+  sync-gdrive:
+    # Both `GDRIVE_SOURCE` and `HOST_SYNC_DIR` must be present in `.env`
+    # parallel to this compose file or passed in via `--env-file`
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["sync-gdrive", "--gdrive-source", "${GDRIVE_SOURCE}", "--destination", "/mnt/gdrivesync"]
+    restart: "no"
+    environment:
+      - TELEMETRY_API_URL=http://telemetry-api:8000
+    volumes:
+      - ${HOST_SYNC_DIR}:/mnt/gdrivesync:rw
+    networks:
+      - achterhus-network
+
 networks:
   achterhus-network:
     external: true
