@@ -6,7 +6,7 @@ services:
     container_name: telemetry-api
     restart: unless-stopped
     environment:
-      - DATABASE_URL=sqlite+aiosqlite:////data/telemetry.db
+      - DATABASE_URL=postgresql+asyncpg://telemetry_app:${TELEMETRY_APP_PASSWORD}@postgres:5432/${POSTGRES_DB}
       - LOG_LEVEL=info
     volumes:
       - telemetry-data:/data
