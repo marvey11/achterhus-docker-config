@@ -8,7 +8,7 @@ This repository contains a containerized database stack using PostgreSQL 16 and 
 
 - **Docker** (v20.10+) and **Docker Compose** (v2.0+) installed.
 - The external network `achterhus-network` must exist prior to starting the services.
-  
+
 To create the network manually if it does not exist yet:
 
 ```bash

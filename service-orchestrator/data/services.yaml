@@ -33,6 +33,16 @@ services:
     network: achterhus-network
     timeout_seconds: 1800
 
+  document-router:
+    image: ghcr.io/marvey11/achterhus-utilities/document-router:latest
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${DOCUMENT_SOURCE_DIR}:/source:rw
+      - ${DOCUMENT_STORAGE_DIR}:/target:rw
+    network: achterhus-network
+    timeout_seconds: 600
+
   photo-router:
     image: ghcr.io/marvey11/achterhus-utilities/photo-router:latest
     environment:
@@ -59,18 +69,22 @@ graphs:
     backup-postgres: []
     photo-router: []
     sync-gdrive: []
+    document-router:
+      - sync-gdrive
     backup-storage:
       - backup-postgres
+      - document-router
       - photo-router
-      - sync-gdrive
 
   weekly:
     audiothek-downloader: []
     backup-postgres: []
     photo-router: []
     sync-gdrive: []
+    document-router:
+      - sync-gdrive
     backup-storage:
       - audiothek-downloader
       - backup-postgres
-      - photo-router 
-      - sync-gdrive
+      - document-router
+      - photo-router
