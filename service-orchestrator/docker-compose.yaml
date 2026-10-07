@@ -1,0 +1,16 @@
+services:
+  orchestrator:
+    image: ghcr.io/marvey11/achterhus-service-orchestrator:latest
+    container_name: service-orchestrator
+    restart: "no"
+    env_file:
+      - ${HOME}/.config/achterhus/service-orchestrator.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${PROJECT_DIR}/data:/data
+    networks:
+      - achterhus-network
+
+networks:
+  achterhus-network:
+    external: true

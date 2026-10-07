@@ -1,0 +1,76 @@
+services:
+  audiothek-downloader:
+    image: ghcr.io/marvey11/codescape-utilities/audiothek-downloader:latest
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${AUDIOTHEK_DOWNLOADER_APP_DIR}:/data:rw
+      - ${PODCAST_STORAGE_DIR}:/podcasts:rw
+    network: achterhus-network
+    timeout_seconds: 300
+
+  backup-postgres:
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["backup-postgres", "--destination", "/mnt/pgbackup"]
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ${POSTGRES_BACKUP_DIR}:/mnt/pgbackup:rw
+    network: achterhus-network
+    timeout_seconds: 300
+
+  backup-storage:
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["backup-storage", "--source", "/mnt/storage", "--destination", "/mnt/mirror"]
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${BACKUP_SOURCE_DIR}:/mnt/storage:ro
+      - ${BACKUP_MIRROR_DIR}:/mnt/mirror:rw
+    network: achterhus-network
+    timeout_seconds: 1800
+
+  photo-router:
+    image: ghcr.io/marvey11/achterhus-utilities/photo-router:latest
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${PHOTO_SOURCE_DIR}:/source:rw
+      - ${PHOTO_STORAGE_DIR}:/target:rw
+    network: achterhus-network
+    timeout_seconds: 600
+
+  sync-gdrive:
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["sync-gdrive", "--gdrive-source", "${GDRIVE_SOURCE}", "--destination", "/mnt/gdrivesync"]
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${RCLONE_CONFIG_DIR}:/home/appuser/.config/rclone:rw
+      - ${HOST_SYNC_DIR}:/mnt/gdrivesync:rw
+    network: achterhus-network
+    timeout_seconds: 300
+
+graphs:
+  nightly:
+    backup-postgres: []
+    photo-router: []
+    sync-gdrive: []
+    backup-storage:
+      - backup-postgres
+      - photo-router
+      - sync-gdrive
+
+  weekly:
+    audiothek-downloader: []
+    backup-postgres: []
+    photo-router: []
+    sync-gdrive: []
+    backup-storage:
+      - audiothek-downloader
+      - backup-postgres
+      - photo-router 
+      - sync-gdrive
