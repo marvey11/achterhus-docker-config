@@ -9,6 +9,18 @@ services:
     network: achterhus-network
     timeout_seconds: 300
 
+  backup-home-files:
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["backup-home-files", "--source", "/mnt/buphomesrc", "--destination", "/mnt/buphomedest", "--files-from", "/data/backup-files.txt"]
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${BACKUP_HOME_FILES_SRC_DIR}:/mnt/buphomesrc:ro
+      - ${BACKUP_HOME_FILES_DEST_DIR}:/mnt/buphomedest:rw
+      - ${BACKUP_HOME_FILES_FROM}:/data/backup-files.txt:ro
+    network: achterhus-network
+    timeout_seconds: 300
+
   backup-postgres:
     image: ghcr.io/marvey11/achterhus-server-tools:latest
     command: ["backup-postgres", "--destination", "/mnt/pgbackup"]
@@ -66,18 +78,21 @@ services:
 
 graphs:
   nightly:
+    backup-home-files: []
     backup-postgres: []
     photo-router: []
     sync-gdrive: []
     document-router:
       - sync-gdrive
     backup-storage:
+      - backup-home-files
       - backup-postgres
       - document-router
       - photo-router
 
   weekly:
     audiothek-downloader: []
+    backup-home-files: []
     backup-postgres: []
     photo-router: []
     sync-gdrive: []
@@ -85,6 +100,7 @@ graphs:
       - sync-gdrive
     backup-storage:
       - audiothek-downloader
+      - backup-home-files
       - backup-postgres
       - document-router
       - photo-router
