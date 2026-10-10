@@ -92,14 +92,15 @@ graphs:
 
   weekly:
     audiothek-downloader: []
-    backup-home-files: []
+    backup-home-files:
+      # back up the podcast downloader's manifest as well
+      - audiothek-downloader
     backup-postgres: []
     photo-router: []
     sync-gdrive: []
     document-router:
       - sync-gdrive
     backup-storage:
-      - audiothek-downloader
       - backup-home-files
       - backup-postgres
       - document-router
