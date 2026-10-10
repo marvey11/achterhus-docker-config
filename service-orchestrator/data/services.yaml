@@ -11,12 +11,12 @@ services:
 
   backup-home-files:
     image: ghcr.io/marvey11/achterhus-server-tools:latest
-    command: ["backup-home-files", "--source", "/mnt/buphomesrc", "--destination", "/mnt/buphomedest", "--files-from", "/data/backup-files.txt"]
+    command: ["backup-home-files", "--source", "/source", "--destination", "/target", "--files-from", "/data/backup-files.txt"]
     environment:
       TELEMETRY_API_URL: ${TELEMETRY_API_URL}
     volumes:
-      - ${BACKUP_HOME_FILES_SRC_DIR}:/mnt/buphomesrc:ro
-      - ${BACKUP_HOME_FILES_DEST_DIR}:/mnt/buphomedest:rw
+      - ${BACKUP_HOME_FILES_SRC_DIR}:/source:ro
+      - ${BACKUP_HOME_FILES_DEST_DIR}:/target:rw
       - ${BACKUP_HOME_FILES_FROM}:/data/backup-files.txt:ro
     network: achterhus-network
     timeout_seconds: 300
