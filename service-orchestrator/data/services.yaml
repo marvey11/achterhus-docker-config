@@ -78,11 +78,14 @@ services:
 
 graphs:
   nightly:
-    backup-home-files: []
     backup-postgres: []
     photo-router: []
     sync-gdrive: []
+    backup-home-files:
+      # back up the updated rclone config from the 'sync-gdrive' run
+      - sync-gdrive
     document-router:
+      # document router also needs to route the file synced from GDrive
       - sync-gdrive
     backup-storage:
       - backup-home-files
@@ -92,13 +95,16 @@ graphs:
 
   weekly:
     audiothek-downloader: []
-    backup-home-files:
-      # back up the podcast downloader's manifest as well
-      - audiothek-downloader
     backup-postgres: []
     photo-router: []
     sync-gdrive: []
+    backup-home-files:
+      # back up the podcast downloader's manifest as well
+      - audiothek-downloader
+      # back up the updated rclone config from the 'sync-gdrive' run
+      - sync-gdrive
     document-router:
+      # document router also needs to route the file synced from GDrive
       - sync-gdrive
     backup-storage:
       - backup-home-files
