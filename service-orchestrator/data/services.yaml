@@ -1,3 +1,5 @@
+version: 1
+
 services:
   audiothek-downloader:
     image: ghcr.io/marvey11/codescape-utilities/audiothek-downloader:latest
