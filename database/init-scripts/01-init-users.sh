@@ -15,4 +15,14 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-E
     GRANT ALL ON SCHEMA telemetry TO telemetry_app;
     ALTER DEFAULT PRIVILEGES IN SCHEMA telemetry GRANT ALL ON TABLES TO telemetry_app;
     ALTER DEFAULT PRIVILEGES IN SCHEMA telemetry GRANT ALL ON SEQUENCES TO telemetry_app;
+
+    ----------------------------------------------------
+    -- Pyfolio Service
+    ----------------------------------------------------
+    CREATE USER pyfolio_app WITH PASSWORD '$PYFOLIO_APP_PASSWORD';
+    CREATE SCHEMA IF NOT EXISTS pyfolio AUTHORIZATION pyfolio_app;
+    ALTER USER pyfolio_app SET search_path TO pyfolio;
+    GRANT ALL ON SCHEMA pyfolio TO pyfolio_app;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA pyfolio GRANT ALL ON TABLES TO pyfolio_app;
+    ALTER DEFAULT PRIVILEGES IN SCHEMA pyfolio GRANT ALL ON SEQUENCES TO pyfolio_app;
 EOSQL

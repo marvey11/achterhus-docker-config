@@ -1,0 +1,36 @@
+name: achterhus-pyfolio
+
+services:
+  pyfolio-migrate:
+    image: ghcr.io/marvey11/pyfolio-backend/pyfolio-api:latest
+    command: ["alembic", "-c", "/app/alembic.ini", "upgrade", "head"]
+    restart: "no"
+    environment:
+      DATABASE_URL: postgresql+psycopg://pyfolio_app:${PYFOLIO_APP_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    networks:
+      - achterhus-network
+
+  pyfolio-api:
+    image: ghcr.io/marvey11/pyfolio-backend/pyfolio-api:latest
+    container_name: pyfolio-api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+psycopg://pyfolio_app:${PYFOLIO_APP_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    depends_on:
+      pyfolio-migrate:
+        condition: service_completed_successfully
+    networks:
+      - achterhus-network
+
+  pyfolio-dashboard:
+    image: ghcr.io/marvey11/pyfolio-dashboard:latest
+    container_name: pyfolio-dashboard
+    restart: unless-stopped
+    depends_on:
+      - pyfolio-api
+    networks:
+      - achterhus-network
+
+networks:
+  achterhus-network:
+    external: true
