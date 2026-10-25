@@ -64,6 +64,37 @@ CREATE EXTENSION IF NOT EXISTS "pg_trgm";
 
 *Note: Initialisation scripts are executed **only once** when the database data directory is empty. Subsequent container restarts ignore these scripts.*
 
+### Adding Pyfolio to an Existing Database
+
+The Pyfolio role and schema are included in `init-scripts/01-init-users.sh`, but a restart of an already-initialized PostgreSQL container will not execute that change. From the repository root, load the values from `.env` and run the following once:
+
+```bash
+set -a
+. ./.env
+set +a
+
+docker exec -i postgres psql -v ON_ERROR_STOP=1 \
+  -v pyfolio_password="$PYFOLIO_APP_PASSWORD" \
+  -U "$POSTGRES_USER" -d "$POSTGRES_DB" <<'SQL'
+SELECT format('CREATE ROLE pyfolio_app LOGIN PASSWORD %L', :'pyfolio_password')
+WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'pyfolio_app')
+\gexec
+ALTER ROLE pyfolio_app WITH PASSWORD :'pyfolio_password';
+CREATE SCHEMA IF NOT EXISTS pyfolio AUTHORIZATION pyfolio_app;
+ALTER SCHEMA pyfolio OWNER TO pyfolio_app;
+ALTER ROLE pyfolio_app SET search_path TO pyfolio;
+GRANT ALL ON SCHEMA pyfolio TO pyfolio_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE pyfolio_app IN SCHEMA pyfolio GRANT ALL ON TABLES TO pyfolio_app;
+ALTER DEFAULT PRIVILEGES FOR ROLE pyfolio_app IN SCHEMA pyfolio GRANT ALL ON SEQUENCES TO pyfolio_app;
+SQL
+```
+
+After the role and schema exist, the Pyfolio Compose stack applies Alembic migrations before starting the API:
+
+```bash
+docker compose --env-file .env -f pyfolio/docker-compose.yaml up -d
+```
+
 ---
 
 ## Gateway & Routing Configuration
