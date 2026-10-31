@@ -1,6 +1,16 @@
 version: 1
 
 services:
+  apply-git-local-retention:
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["apply-git-local-retention", "--snapshot-directory", "/target"]
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${GIT_REPO_SNAPSHOT_DIR}:/target:rw
+    network: achterhus-network
+    timeout_seconds: 1800
+
   audiothek-downloader:
     image: ghcr.io/marvey11/codescape-utilities/audiothek-downloader:latest
     environment:
@@ -47,6 +57,17 @@ services:
     network: achterhus-network
     timeout_seconds: 1800
 
+  create-git-local-snapshots:
+    image: ghcr.io/marvey11/achterhus-server-tools:latest
+    command: ["create-git-local-snapshots", "--source", "/source", "--destination", "/target"]
+    environment:
+      TELEMETRY_API_URL: ${TELEMETRY_API_URL}
+    volumes:
+      - ${GIT_REPO_BASE_DIR}:/source:ro
+      - ${GIT_REPO_SNAPSHOT_DIR}:/target:rw
+    network: achterhus-network
+    timeout_seconds: 1800
+
   document-router:
     image: ghcr.io/marvey11/achterhus-utilities/document-router:latest
     environment:
@@ -81,8 +102,11 @@ services:
 graphs:
   nightly:
     backup-postgres: []
+    create-git-local-snapshots: []
     photo-router: []
     sync-gdrive: []
+    apply-git-local-retention:
+      - create-git-local-snapshots
     backup-home-files:
       # back up the updated rclone config from the 'sync-gdrive' run
       - sync-gdrive
@@ -90,6 +114,7 @@ graphs:
       # document router also needs to route the file synced from GDrive
       - sync-gdrive
     backup-storage:
+      - apply-git-local-retention
       - backup-home-files
       - backup-postgres
       - document-router
@@ -98,8 +123,11 @@ graphs:
   weekly:
     audiothek-downloader: []
     backup-postgres: []
+    create-git-local-snapshots: []
     photo-router: []
     sync-gdrive: []
+    apply-git-local-retention:
+      - create-git-local-snapshots
     backup-home-files:
       # back up the podcast downloader's manifest as well
       - audiothek-downloader
@@ -109,6 +137,7 @@ graphs:
       # document router also needs to route the file synced from GDrive
       - sync-gdrive
     backup-storage:
+      - apply-git-local-retention
       - backup-home-files
       - backup-postgres
       - document-router
