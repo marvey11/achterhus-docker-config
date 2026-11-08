@@ -79,7 +79,7 @@ services:
     timeout_seconds: 600
 
   photo-router:
-    image: ghcr.io/marvey11/achterhus-utilities/photo-router:latest
+    image: ghcr.io/marvey11/achterhus-utilities/photo-router:1.0
     environment:
       TELEMETRY_API_URL: ${TELEMETRY_API_URL}
     volumes:
