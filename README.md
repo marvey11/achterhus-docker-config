@@ -9,11 +9,13 @@ At this point, there are configurations for:
 * the Samba/NAS configuration for backups
 * the centralised `achterhus` gateway
 * the PostgreSQL and `pgadmin` containers for applications requiring a database
-* the service telemetry application, consisting of [Telemetry API](https://github.com/marvey11/achterhus-telemetry-api) and [Telemetry Dashboard](https://github.com/marvey11/achterhus-telemetry-dashboard)
+* the Service Telemetry application, consisting of [Telemetry API](https://github.com/marvey11/achterhus-telemetry-api) and [Telemetry Dashboard](https://github.com/marvey11/achterhus-telemetry-dashboard)
+* the Pyfolio application, consisting of [Pyfolio API](https://github.com/marvey11/pyfolio-backend) and accompanying [Pyfolio Dashboard](https://github.com/marvey11/pyfolio-dashboard)
 * the [service orchestrator](https://github.com/marvey11/achterhus-service-orchestrator) running Dockerised worker services from
   * the [Achterhus Server Tools](https://github.com/marvey11/achterhus-server-tools) -- a collection of Bash worker scripts specifically for the Achterhus home server
   * the [Achterhus Utilities](https://github.com/marvey11/achterhus-utilities) -- a collection of Python workers specifically for the Achterhus home server
   * the [Codescape Utilities](https://github.com/marvey11/codescape-utilities) -- a collection of Python workers in the Codescape namespace that are not tied as closely to the Achterhus home server
+  * the [Pyfolio](https://github.com/marvey11/pyfolio-backend) worker services -- a collection of workers updating the Pyfolio database from external sources
 
 ## Docker Network
 
