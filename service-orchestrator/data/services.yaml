@@ -12,7 +12,7 @@ services:
     timeout_seconds: 1800
 
   audiothek-downloader:
-    image: ghcr.io/marvey11/codescape-utilities/audiothek-downloader:1.0.0
+    image: ghcr.io/marvey11/codescape-utilities/audiothek-downloader:1
     environment:
       TELEMETRY_API_URL: ${TELEMETRY_API_URL}
     volumes:
