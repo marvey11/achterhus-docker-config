@@ -1,10 +1,395 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Achterhus Gateway</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#f5f7fb">
+    <title>Achterhus · Home</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #17233b;
+            background: #f5f7fb;
+            font-synthesis: none;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            min-width: 320px;
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(ellipse at 50% -12%, rgba(205, 223, 255, 0.62), transparent 42rem),
+                #f5f7fb;
+        }
+
+        .page {
+            width: min(100% - 48px, 1040px);
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 0;
+            border-bottom: 1px solid #e4e9f2;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 11px;
+            color: inherit;
+            font-size: 15px;
+            font-weight: 750;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+        }
+
+        .brand-mark {
+            display: grid;
+            width: 34px;
+            height: 34px;
+            place-items: center;
+            border-radius: 11px;
+            background: #315fd4;
+            color: white;
+        }
+
+        .brand-mark svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #62708a;
+            font-size: 13px;
+        }
+
+        .status::before {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #36a879;
+            box-shadow: 0 0 0 3px #e0f4eb;
+            content: "";
+        }
+
+        main {
+            padding: 76px 0 88px;
+        }
+
+        .intro {
+            max-width: 640px;
+            margin-bottom: 48px;
+        }
+
+        .eyebrow {
+            margin: 0 0 14px;
+            color: #315fd4;
+            font-size: 12px;
+            font-weight: 750;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(36px, 6vw, 56px);
+            font-weight: 740;
+            letter-spacing: -0.055em;
+            line-height: 1.08;
+        }
+
+        .intro p:last-child {
+            max-width: 510px;
+            margin: 18px 0 0;
+            color: #65728a;
+            font-size: 17px;
+            line-height: 1.65;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin: 0 0 16px;
+        }
+
+        h2 {
+            margin: 0;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .section-note {
+            margin: 0;
+            color: #8792a6;
+            font-size: 12px;
+        }
+
+        .apps {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .app {
+            display: flex;
+            min-height: 206px;
+            flex-direction: column;
+            padding: 22px;
+            border: 1px solid #e4e9f2;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.88);
+            box-shadow: 0 5px 18px rgba(34, 54, 91, 0.035);
+            color: inherit;
+            text-decoration: none;
+            transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+        }
+
+        .app:hover {
+            transform: translateY(-3px);
+            border-color: #c5d3f4;
+            box-shadow: 0 12px 28px rgba(34, 54, 91, 0.09);
+        }
+
+        .app:focus-visible {
+            outline: 3px solid #87a7ff;
+            outline-offset: 3px;
+        }
+
+        .app-icon {
+            display: grid;
+            width: 42px;
+            height: 42px;
+            place-items: center;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: #edf2ff;
+            color: #315fd4;
+        }
+
+        .app-icon svg {
+            width: 21px;
+            height: 21px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+        }
+
+        .app-icon.green {
+            background: #e8f6ef;
+            color: #21865b;
+        }
+
+        .app-icon.amber {
+            background: #fff3df;
+            color: #b97819;
+        }
+
+        .app h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .app p {
+            margin: 8px 0 18px;
+            color: #738098;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        .app-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            margin-top: auto;
+            color: #315fd4;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .app-link svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+            transition: transform 160ms ease;
+        }
+
+        .app:hover .app-link svg {
+            transform: translateX(3px);
+        }
+
+        footer {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0 26px;
+            border-top: 1px solid #e4e9f2;
+            color: #8792a6;
+            font-size: 12px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 720px) {
+            main {
+                padding-top: 58px;
+            }
+
+            .apps {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 500px) {
+            .page {
+                width: min(100% - 32px, 1040px);
+            }
+
+            header {
+                padding: 20px 0;
+            }
+
+            .status {
+                font-size: 12px;
+            }
+
+            main {
+                padding: 48px 0 58px;
+            }
+
+            .intro {
+                margin-bottom: 36px;
+            }
+
+            .intro p:last-child {
+                font-size: 15px;
+            }
+
+            .apps {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .app {
+                min-height: 0;
+            }
+
+            footer {
+                gap: 12px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Achterhus Gateway</h1>
-    <p>Welcome to the Achterhus Gateway. This is the main entry point for accessing the services provided by the gateway.</p>
+    <div class="page">
+        <header>
+            <a class="brand" href="/" aria-label="Achterhus home">
+                <span class="brand-mark" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M3.5 10.5 12 4l8.5 6.5v9a.5.5 0 0 1-.5.5h-5.5v-6h-5v6H4a.5.5 0 0 1-.5-.5v-9Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                Achterhus
+            </a>
+            <span class="status">Home server</span>
+        </header>
+
+        <main>
+            <section class="intro" aria-labelledby="welcome-heading">
+                <p class="eyebrow">Your home server</p>
+                <h1 id="welcome-heading">Welcome home.</h1>
+                <p>Your personal apps and server tools, all together in one place. Choose a service to get started.</p>
+            </section>
+
+            <section aria-labelledby="apps-heading">
+                <div class="section-heading">
+                    <h2 id="apps-heading">Your apps</h2>
+                    <p class="section-note">Available on this server</p>
+                </div>
+                <div class="apps">
+                    <a class="app" href="/pyfolio/">
+                        <span class="app-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 19V5m0 14h16M8 15l3-4 3 2 5-7"/>
+                                <path d="M16 6h3v3"/>
+                            </svg>
+                        </span>
+                        <h3>Pyfolio</h3>
+                        <p>Your personal finance dashboard.</p>
+                        <span class="app-link">Open app
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                        </span>
+                    </a>
+
+                    <a class="app" href="/telemetry-dashboard/">
+                        <span class="app-icon green" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M3 12h4l2.5-7 5 14 2.5-7h4"/>
+                            </svg>
+                        </span>
+                        <h3>Telemetry Dashboard</h3>
+                        <p>Explore your telemetry and activity data.</p>
+                        <span class="app-link">Open dashboard
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                        </span>
+                    </a>
+
+                    <a class="app" href="/pgadmin/">
+                        <span class="app-icon amber" aria-hidden="true">
+                            <svg viewBox="0 0 24 24">
+                                <ellipse cx="12" cy="5.5" rx="7.5" ry="3"/>
+                                <path d="M4.5 5.5v6c0 1.7 3.4 3 7.5 3m7.5-9v6c0 1.7-3.4 3-7.5 3m-7.5-3v6c0 1.7 3.4 3 7.5 3 1.1 0 2.2-.1 3.1-.3"/>
+                                <path d="M18 15v6m-3-3h6"/>
+                            </svg>
+                        </span>
+                        <h3>pgAdmin</h3>
+                        <p>Manage your PostgreSQL databases.</p>
+                        <span class="app-link">Open tool
+                            <svg viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+                        </span>
+                    </a>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Achterhus home server</p>
+            <p>Private services, close to home.</p>
+        </footer>
+    </div>
 </body>
 </html>
