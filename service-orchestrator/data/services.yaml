@@ -55,7 +55,7 @@ services:
       - ${BACKUP_SOURCE_DIR}:/mnt/storage:ro
       - ${BACKUP_MIRROR_DIR}:/mnt/mirror:rw
     network: achterhus-network
-    timeout_seconds: 1800
+    timeout_seconds: 3600
 
   create-git-local-snapshots:
     image: ghcr.io/marvey11/achterhus-server-tools:latest
