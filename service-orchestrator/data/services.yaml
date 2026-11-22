@@ -111,7 +111,7 @@ graphs:
       # back up the updated rclone config from the 'sync-gdrive' run
       - sync-gdrive
     document-router:
-      # document router also needs to route the file synced from GDrive
+      # document router also needs to route the files previously synced from GDrive
       - sync-gdrive
     backup-storage:
       - apply-git-local-retention
@@ -134,7 +134,7 @@ graphs:
       # back up the updated rclone config from the 'sync-gdrive' run
       - sync-gdrive
     document-router:
-      # document router also needs to route the file synced from GDrive
+      # document router also needs to route the files previously synced from GDrive
       - sync-gdrive
     backup-storage:
       - apply-git-local-retention
